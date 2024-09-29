@@ -1,0 +1,46 @@
+.carousel {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto; /* Centers the carousel horizontally */
+  overflow: hidden;
+  display: flex;
+  justify-content: center; /* Centers the content inside the carousel */
+  align-items: center;     /* Centers the content vertically */
+  height: 400px; /* Set a fixed height for the carousel */
+}
+
+.carousel-img {
+  width: 100vh;                /* Full width to fit the container */
+  height: 100%;               /* Full height to fill the carousel */
+  object-fit: cover;          /* Ensures the image covers the entire carousel area */
+  display: block;             /* Ensures that images take up space properly */
+  transition: transform 0.3s ease-in-out; /* Smooth scaling transition */
+}
+
+.carousel-img:hover {
+  transform: scale(1.05);    /* Slight zoom on hover for effect */
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;              /* Positioning for indicators */
+  width: 100%;
+}
+
+.carousel-indicator {
+  width: 10px;               /* Size of indicators */
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.9); /* Default color */
+  border-radius: 50%;        /* Rounded indicators */
+  margin: 0 5px;            /* Spacing between indicators */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth color transition */
+}
+
+.carousel-indicator.active,
+.carousel-indicator:hover {
+  background-color: rgba(234, 239, 44);, 1; /* Active and hover color */
+}
