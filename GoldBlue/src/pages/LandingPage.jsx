@@ -10,6 +10,7 @@ import image1 from "../assets/mobile-fast-payment.png";
 import image2 from "../assets/friendly-ui.jpg";
 import image3 from "../assets/security.jpg";
 import image4 from "../assets/track-payment.jpg";
+import goldblueLogo from "../assets/goldblue.jpg";
 
 const rows = [
   {
@@ -68,7 +69,7 @@ export default function LandingPage() {
           }}
         >
           <img
-            src="src/assets/goldblue.jpg"
+            src={goldblueLogo}
             alt={t("GoldBlue")}
             style={{ maxWidth: "100%", height: "auto", borderRadius: "20px" }}
           />

@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import goldblueLogo from "../assets/goldblue.png";
 
 const pages = [
   { label: "aboutUs", path: "/about" },
@@ -131,7 +132,7 @@ export default function Header({ children }) {
                 textDecoration: "none",
               }}
             >
-              <img src="src/assets/goldblue.png" alt="logo-goldblue" style={{ height: 30}}/>
+              <img src={goldblueLogo} alt="logo-goldblue" style={{ height: 30}}/>
               GoldBlue
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
