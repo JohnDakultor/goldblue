@@ -28,6 +28,9 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 const whitelist = process.env.WHITELISTED_DOMAINS ? process.env.WHITELISTED_DOMAINS.split(',') : [];
+
+whitelist.push("https://goldblue.vercel.app");
+
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || whitelist.indexOf(origin) !== -1) {
