@@ -66,7 +66,7 @@ export default function Header({ children }) {
               }}
             >
               <img
-            src="src/assets/goldblue.png"
+            src={goldblueLogo}
             style={{ height: 40, marginLeft: 16}}
             alt="logo-goldblue"
             
