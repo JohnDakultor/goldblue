@@ -27,12 +27,12 @@ This project consists of two main components:
 1. Clone the repository:
     ```bash
     git clone https://github.com/your-username/Deeptalk.git
-    cd Deeptalk
+    cd goldblue
     ```
 
 2. Install frontend dependencies:
     ```bash
-    cd Deeptalk
+    cd goldblue
     npm install
     # or
     yarn install
@@ -56,7 +56,7 @@ This project consists of two main components:
 
 2. Start the frontend application:
     ```bash
-    cd Deeptalk
+    cd goldblue
     npm run dev
     # or
     yarn start
