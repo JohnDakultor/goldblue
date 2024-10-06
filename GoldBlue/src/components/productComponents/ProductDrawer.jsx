@@ -80,7 +80,7 @@ export default function ProductDrawer() {
   const [darkMode, setDarkMode] = useLocalStorage("darkMode", false)
   const [user, setUser] = useState('');
 
-
+  const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
   
   const auth = useAuth()
 
@@ -95,7 +95,7 @@ export default function ProductDrawer() {
     const fetchUser = async () => {
       try { 
         const token = localStorage.getItem("jwt");
-        const response = await axios.get("http://localhost:3001/api/user", {
+        const response = await axios.get(`${baseURL}/user`, {
           headers:{"x-access-token":token},
         });
 

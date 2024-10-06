@@ -1,11 +1,7 @@
 import Axios from "axios";
 import { Navigate } from "react-router-dom";
 
-const jwtToken = localStorage.getItem("jwt");
-console.log("JWT Token:", jwtToken);
-
-const port = 3001;
-
+const baseURL = "https://goldblue-backend-z2sk.vercel.app/api"; // Use the Vercel URL
 
 /**
  * Signup a user with the provided information.
@@ -19,16 +15,15 @@ const port = 3001;
  */
 export const signup = async (firstName, lastName, email, password) => {
   try {
-    const response = await Axios.post(`http://localhost:${port}/api/signup`, {
-      // Use the port variable
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password,
+    const response = await Axios.post(`${baseURL}/signup`, {
+      firstName,
+      lastName,
+      email,
+      password,
     });
     return response.data;
   } catch (error) {
-    throw new Error("Signup failed"); // Handle signup failure
+    throw new Error("Signup failed");
   }
 };
 
@@ -42,14 +37,13 @@ export const signup = async (firstName, lastName, email, password) => {
  */
 export const login = async (email, password) => {
   try {
-    const response = await Axios.post(`http://localhost:${port}/api/login`, {
-      // Use the port variable
+    const response = await Axios.post(`${baseURL}/login`, {
       email,
       password,
     });
     return response.data;
   } catch (error) {
-    throw new Error("Login failed"); // Handle login failure
+    throw new Error("Login failed");
   }
 };
 
@@ -62,16 +56,15 @@ export const login = async (email, password) => {
  */
 export const forgotPassword = async (email) => {
   try {
-    const response = await Axios.post(`http://localhost:${port}/api/forgotPassword`, {
+    const response = await Axios.post(`${baseURL}/forgotPassword`, {
       email,
     });
-    return response.data; // This is correct, we just return data
+    return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
-      // Pass the error message from the server
       return error.response.data;
     }
-    throw new Error("An unexpected error occurred"); // Generic error handling
+    throw new Error("An unexpected error occurred");
   }
 };
 
@@ -83,80 +76,76 @@ export const forgotPassword = async (email) => {
  * @returns {Promise<Object>} - The response from the server after a successful password reset.
  * @throws {Error} - Password reset failed.
  */
-
 export const resetPassword = async (token, newPassword) => {
   try {
-    const response = await Axios.post(`http://localhost:${port}/api/resetPassword`, {
-      // Use the port variable
+    const response = await Axios.post(`${baseURL}/resetPassword`, {
       token,
       newPassword,
     });
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
-      // Pass the error message from the server
       return error.response.data;
     }
-    throw new Error("Login failed"); // Handle login failure
+    throw new Error("Login failed");
   }
 };
 
 export const deposit = async (image, amount) => {
   try {
     const formData = new FormData();
-    formData.append('image', image); // Append the image file
-    formData.append('amount', amount); // Append the amount
+    formData.append('image', image);
+    formData.append('amount', amount);
 
-    const response = await Axios.post(`http://localhost:${port}/api/deposit`, formData, {
+    const response = await Axios.post(`${baseURL}/deposit`, formData, {
       headers: {
-        "x-access-token": localStorage.getItem("jwt"), // Replace `yourToken` with the actual token
+        "x-access-token": localStorage.getItem("jwt"),
       },
     });
     
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
-      return error.response.data; // Return the server error message
+      return error.response.data;
     }
-    throw error; // Rethrow if there's no response
+    throw error;
   }
 };
 
-export const getTransactions = async (userId) => {
+export const getTransactions = async () => {
   try {
-      const token = localStorage.getItem("jwt");
-      const response = await Axios.get(`http://localhost:3001/api/transactions`, {
-          headers: { "x-access-token": token },
-      });
+    const token = localStorage.getItem("jwt");
+    const response = await Axios.get(`${baseURL}/transactions`, {
+      headers: { "x-access-token": token },
+    });
 
-      // Assuming the response.data is an array of transactions
-      return response.data; // Ensure this returns an array
+    return response.data; // Return the data
   } catch (error) {
-      console.error("Error fetching transactions:", error);
-      return []; // Return an empty array on error
+    console.error("Error fetching transactions:", error);
+    return []; // Return an empty array on error
   }
 };
 
-export const getWithdrawTransactions = async (userId) => {
+export const getWithdrawTransactions = async () => {
   try {
-      const token = localStorage.getItem("jwt");
-      const response = await Axios.get(`http://localhost:3001/api/withDrawTransactions`, {
-          headers: { "x-access-token": token },
-      });
+    const token = localStorage.getItem("jwt");
+    const response = await Axios.get(`${baseURL}/withDrawTransactions`, {
+      headers: { "x-access-token": token },
+    });
 
-      // Assuming the response.data is an array of transactions 
-      return response.data; // Ensure this returns an array
+    return response.data; // Return the data
   } catch (error) {
-      console.error("Error fetching transactions:", error);
-      return []; // Return an empty array on error
+    console.error("Error fetching transactions:", error);
+    return []; // Return an empty array on error
   }
 }
 
 export const getWithdraw = async (amount) => {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await Axios.post(`http://localhost:${port}/api/withdraw`, {
+    const response = await Axios.post(`${baseURL}/withdraw`, {
       amount,
+    }, {
       headers: {
         "x-access-token": token,
       }
@@ -164,13 +153,11 @@ export const getWithdraw = async (amount) => {
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
-      return error.response.data; // Return the server error message
+      return error.response.data;
     }
-    throw error; // Rethrow if there's no response
+    throw error;
   }
 }
-
-
 
 export default {
   signup,

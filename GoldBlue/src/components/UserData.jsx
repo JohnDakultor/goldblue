@@ -8,6 +8,7 @@ const withUserData = (WrappedComponent) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalContent, setModalContent] = useState('');
+    const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
 
     const tokenLoggedOut = async () => {
       try {
@@ -15,7 +16,7 @@ const withUserData = (WrappedComponent) => {
         console.log('Token being sent:', token);
 
         const response = await axios.post(
-          'http://localhost:3001/api/userData',
+          `${baseURL}/userData`,
           { token },
           {
             headers: {

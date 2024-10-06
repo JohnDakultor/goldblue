@@ -24,6 +24,8 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const auth = useAuth();
 
+  const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     setErrorMessage("");
@@ -52,7 +54,7 @@ export default function LoginPage() {
     }
   
     try {
-      const res = await Axios.post("http://localhost:3001/api/login", {
+      const res = await Axios.post(`${baseURL}/login`, {
         email: email,
         password: password,
       });

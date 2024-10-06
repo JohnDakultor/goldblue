@@ -46,12 +46,14 @@ const Withdraw = () => {
         return parseFloat(localStorage.getItem("lastTotalDeposits")) || 0;
     });
 
+
+    const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
     
 
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const depositsResponse = await axios.get("http://localhost:3001/api/transactions", {
+                const depositsResponse = await axios.get(`${baseURL}/transactions`, {
                     headers: { "x-access-token": localStorage.getItem("jwt") },
                 });
 
@@ -63,7 +65,7 @@ const Withdraw = () => {
                 setTotalDeposits(totalDeposited);
 
                 // Check the last processed total deposits from the server
-                const lastProcessedTotalResponse = await axios.get("http://localhost:3001/api/lastProcessedTotal", {
+                const lastProcessedTotalResponse = await axios.get(`${baseURL}/lastProcessedTotal`, {
                     headers: { "x-access-token": localStorage.getItem("jwt") },
                 });
 
@@ -94,7 +96,7 @@ const Withdraw = () => {
 
     const sendAccumulation = async (totalDeposits) => {
         try {
-            await axios.post("http://localhost:3001/api/accumulation", {
+            await axios.post(`${baseURL}/accumulation`, {
                 amount: totalDeposits,
             }, {
                 headers: { "x-access-token": localStorage.getItem("jwt") },
@@ -107,7 +109,7 @@ const Withdraw = () => {
 
     const fetchAccumulation = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/api/accumulation", {
+            const response = await axios.get(`${baseURL}/accumulation`, {
                 headers: { "x-access-token": localStorage.getItem("jwt") },
             });
             setAccumulation(response.data.accumulation);
@@ -150,7 +152,7 @@ const Withdraw = () => {
     
         try {
             // Step 1: Call the withdrawal API that updates the database
-            const dbResponse = await axios.post("http://localhost:3001/api/withdraw", {
+            const dbResponse = await axios.post(`${baseURL}/withdraw`, {
                 method,
                 amount: parseFloat(amount),
                 ...(method === "trx" ? { walletKey, accountName } : { accountName, accountNumber }),
@@ -162,7 +164,7 @@ const Withdraw = () => {
             });
     
             // Immediately deduct from accumulation without waiting for dbResponse
-            const accumulationResponse = await axios.post("http://localhost:3001/api/accumulation/withdraw", {
+            const accumulationResponse = await axios.post(`${baseURL}/accumulation/withdraw`, {
                 amount: parseFloat(amount),
             }, {
                 headers: {

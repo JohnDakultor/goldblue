@@ -28,6 +28,8 @@ const Deposit = () => {
     const [modalTitle, setModalTitle] = useState(""); // Title for modal
     const [modalContent, setModalContent] = useState(""); // Content for modal
 
+    
+
     const handleCopyAddress = () => {
         navigator.clipboard.writeText(tronWalletAddress);
         setCopied(true);

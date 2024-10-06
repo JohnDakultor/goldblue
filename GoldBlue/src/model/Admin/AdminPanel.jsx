@@ -30,7 +30,8 @@ const AdminPanel = () => {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
-    const BASE_URL = "http://localhost:3001/";
+    const BASE_URL = "https://goldblue-backend-z2sk.vercel.app/";
+    const ApiUrl = "https://goldblue-backend-z2sk.vercel.app/api";
     const token = localStorage.getItem("jwt");
     const navigate = useNavigate(); 
 
@@ -39,8 +40,8 @@ const AdminPanel = () => {
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const depositsRes = await Axios.get("http://localhost:3001/api/AllTransactions");
-                const withdrawalsRes = await Axios.get("http://localhost:3001/api/AllWithdrawals");
+                const depositsRes = await Axios.get(`${ApiUrl}/AllTransactions`);
+                const withdrawalsRes = await Axios.get(`${ApiUrl}/AllWithdrawals`);
                 setDeposits(depositsRes.data);
                 setWithdrawals(withdrawalsRes.data);
                 setLoading(false);
@@ -68,9 +69,9 @@ const AdminPanel = () => {
 
     const handleConfirmDeposit = async (id) => {
         try {
-            const response = await Axios.post(`http://localhost:3001/api/deposits/confirm/${id}`);
+            const response = await Axios.post(`${ApiUrl}/deposits/confirm/${id}`);
             if (response.status === 200) {
-                await Axios.post(`http://localhost:3001/api/notifications`, {
+                await Axios.post(`${ApiUrl}/notifications`, {
                     user_id: response.data.user_id,
                     message: `Your deposit of $${response.data.amount} has been confirmed.`,
                     headers: { "x-access-token": token }
@@ -94,10 +95,10 @@ const AdminPanel = () => {
 
     const handleConfirmWithdrawal = async (id) => {
         try {
-            const response = await Axios.post(`http://localhost:3001/api/withdraw/confirm/${id}`);
+            const response = await Axios.post(`${ApiUrl}/withdraw/confirm/${id}`);
 
             if (response.status === 200) {
-                await Axios.post(`http://localhost:3001/api/notifications`, {
+                await Axios.post(`${ApiUrl}/notifications`, {
                     user_id: response.data.user_id,
                     message: `Your withdrawal of $${response.data.amount} has been confirmed.`,
                 });

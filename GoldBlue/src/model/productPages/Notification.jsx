@@ -22,11 +22,13 @@ export default function Deposit() {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
+    const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
+
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
                 const token = localStorage.getItem("jwt");
-                const response = await axios.get("http://localhost:3001/api/getNotifications", {
+                const response = await axios.get(`${baseURL}/getNotifications`, {
                     headers: { "x-access-token": token }
                 });
                 setNotifications(response.data);
