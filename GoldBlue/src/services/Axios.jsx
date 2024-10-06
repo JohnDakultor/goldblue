@@ -109,7 +109,7 @@ export const deposit = async (image, amount) => {
 
     const response = await Axios.post(`http://localhost:${port}/api/deposit`, formData, {
       headers: {
-        "x-access-token": jwtToken, // Replace `yourToken` with the actual token
+        "x-access-token": localStorage.getItem("jwt"), // Replace `yourToken` with the actual token
       },
     });
     
@@ -137,6 +137,39 @@ export const getTransactions = async (userId) => {
   }
 };
 
+export const getWithdrawTransactions = async (userId) => {
+  try {
+      const token = localStorage.getItem("jwt");
+      const response = await Axios.get(`http://localhost:3001/api/withDrawTransactions`, {
+          headers: { "x-access-token": token },
+      });
+
+      // Assuming the response.data is an array of transactions 
+      return response.data; // Ensure this returns an array
+  } catch (error) {
+      console.error("Error fetching transactions:", error);
+      return []; // Return an empty array on error
+  }
+}
+
+export const getWithdraw = async (amount) => {
+  try {
+    const token = localStorage.getItem("jwt");
+    const response = await Axios.post(`http://localhost:${port}/api/withdraw`, {
+      amount,
+      headers: {
+        "x-access-token": token,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return error.response.data; // Return the server error message
+    }
+    throw error; // Rethrow if there's no response
+  }
+}
+
 
 
 export default {
@@ -144,6 +177,8 @@ export default {
   login,
   forgotPassword,
   resetPassword,
-    deposit,
-  getTransactions
+  deposit,
+  getTransactions,
+  getWithdraw,
+  getWithdrawTransactions
 };

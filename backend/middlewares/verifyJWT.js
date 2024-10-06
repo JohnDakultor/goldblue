@@ -12,6 +12,7 @@ const verifyJWT = (req, res, next) => {
           .json({ auth: false, message: "Failed to authenticate token" });
       } 
         req.userId = decoded.id;
+        req.userData = { firstname: decoded.firstname, lastname: decoded.lastname };
         next();
       
     });

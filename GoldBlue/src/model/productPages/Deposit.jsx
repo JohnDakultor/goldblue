@@ -54,7 +54,7 @@ const Deposit = () => {
             const result = await deposit(image, amount);
             if (result.success) {
                 setModalTitle("Success");
-                setModalContent("Deposit submitted successfully.");
+                setModalContent("Deposit confirmation submitted successfully.");
             } else {
                 setModalTitle("Error");
                 setModalContent("Deposit submission failed.");
@@ -129,7 +129,7 @@ const Deposit = () => {
                         label="Enter Amount you have deposited"
                         variant="outlined"
                         fullWidth
-                        sx={{ mt: 3 }}
+                        sx={{ mt: 3, color: "var(--primary-text-color)" }}
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                     />

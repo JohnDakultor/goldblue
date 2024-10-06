@@ -7,35 +7,40 @@ import {
   Typography,
   Box,
   Container,
+  Card,
+  CardContent,
+  CardHeader,
 } from "@mui/material";
-import axios from "axios";
-import Carousel from "../../components/Carousel";
 import SavingsIcon from "@mui/icons-material/Savings";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm"; // Icon for withdrawals
 import withUserData from "../../components/UserData";
+import Carousel from "../../components/Carousel";
 import img1 from "../../assets/1.jpeg";
 import img2 from "../../assets/2.jpg";
 import img3 from "../../assets/3.jpg";
 import img4 from "../../assets/4.jpg";
 import videoSrc from "../../assets/GoldBlue.mp4"; // Import the video
-import { getTransactions } from "../../services/Axios";
+import { getTransactions, getWithdrawTransactions } from "../../services/Axios";
 import "../../App.css";
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
+  const [withdrawTransactions, setWithdrawTransactions] = useState([]);
   const images = [img1, img2, img3, img4];
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const data = await getTransactions(1);
-      console.log("Fetched transactions:", data); // Log the fetched data
+      const depositData = await getTransactions(1);
+      const withdrawalData = await getWithdrawTransactions(1);
 
-      // Ensure you only set transactions if data is an array
-      if (Array.isArray(data)) {
-        setTransactions(data);
+      // Separate deposits and withdrawals
+      if (Array.isArray(depositData) && Array.isArray(withdrawalData)) {
+        setTransactions(depositData.map((txn) => ({ ...txn, type: 'deposit' })));
+        setWithdrawTransactions(withdrawalData.map((txn) => ({ ...txn, type: 'withdrawal' })));
       } else {
-        console.error("Expected an array but received:", data);
-        setTransactions([]); // Reset to an empty array if not an array
+        console.error("Expected arrays but received:", depositData, withdrawalData);
+        setTransactions([]); // Reset to empty if unexpected response
+        setWithdrawTransactions([]);
       }
     };
 
@@ -85,53 +90,72 @@ const Dashboard = () => {
         {/* Main Content Grid */}
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <Box
-              className="card" // Class for transaction history card
-              sx={{
-                padding: 2,
-                height: "400px",
-                overflowY: "auto",
-              }}
-            >
-              <Typography variant="h5" gutterBottom>
-                Transaction History
-              </Typography>
-              {transactions.length > 0 ? (
-                transactions.map((transaction) => (
-                  <Box
-                    key={transaction.id}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: "8px",
-                    }}
-                  >
-                    <SavingsIcon className="icon" />{" "}
-                    {/* Default icon for all transactions */}
-                    <Typography variant="body2" sx={{ marginLeft: "8px" }}>
-                      Deposit: ${transaction.amount}{" "}
-                      {/* You can change 'Deposit' to something more relevant */}
-                      {/* Optionally add more info here */}
-                    </Typography>
-                  </Box>
-                ))
-              ) : (
-                <Typography variant="body2">
-                  No transactions available.
-                </Typography>
-              )}
-            </Box>
+            <Card className="card" sx={{ mb: 2 }}>
+              <CardHeader title="Deposit History" />
+              <CardContent sx={{ overflowY: "auto", height: "400px" }}>
+                {transactions.length > 0 ? (
+                  transactions.map((transaction, index) => (
+                    <Box
+                      key={`${transaction.id}-${transaction.type}-${index}`} // Ensure unique key
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      <SavingsIcon color="primary" /> {/* Icon for deposits */}
+                      <Typography variant="body2" sx={{ marginLeft: "8px" }}>
+                        Deposit: ${transaction.amount} on {new Date(transaction.created_at).toLocaleDateString()} {/* Label for deposits with date */}
+                      </Typography>
+                    </Box>
+                  ))
+                ) : (
+                  <Typography variant="body2">
+                    No deposits available.
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
           </Grid>
 
           <Grid item xs={12} md={6}>
+            <Card className="card">
+              <CardHeader title="Withdrawal History" />
+              <CardContent sx={{ overflowY: "auto", height: "400px" }}>
+                {withdrawTransactions.length > 0 ? (
+                  withdrawTransactions.map((transaction, index) => (
+                    <Box
+                      key={`${transaction.id}-${transaction.type}-${index}`} // Ensure unique key
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      <LocalAtmIcon color="error" /> {/* Icon for withdrawals */}
+                      <Typography variant="body2" sx={{ marginLeft: "8px" }}>
+                        Withdrawal: ${transaction.amount} on {new Date(transaction.date).toLocaleDateString()} {/* Label for withdrawals with date */}
+                      </Typography>
+                    </Box>
+                  ))
+                ) : (
+                  <Typography variant="body2">
+                    No withdrawals available.
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12}>
             <Box
               className="card" // Class for carousel card
               sx={{
                 padding: 0,
                 height: "400px",
-                display: "flex", // Add this
-                justifyContent: "center", // Center the carousel
-                alignItems: "center", // Center the carousel vertically
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Carousel images={images} />

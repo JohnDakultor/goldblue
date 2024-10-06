@@ -45,31 +45,39 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!isEmailValid(email)) {
       setErrorMessage("Invalid Email");
       return;
     }
-
+  
     try {
       const res = await Axios.post("http://localhost:3001/api/login", {
         email: email,
         password: password,
       });
-
+  
       if (res.data.auth === true) {
         localStorage.setItem('jwt', res.data.token); // Save JWT in local storage
         auth.login(res.data.result); // Log in with user sent from Express
-        navigate('/dashboard', { replace: true });
+  
+        if (email === 'goldbluecorpsol@gmail.com') {
+          navigate('/admin', { replace: true }); // Redirect to admin panel
+        } else {
+          navigate('/dashboard', { replace: true }); // Redirect to user dashboard
+        }
       } else {
         setErrorMessage("Invalid password");
       }
     } catch (err) {
       console.error(err);
-      setErrorMessage("Invalid password"); // Show error for incorrect password
+      setErrorMessage("Invalid password");
     }
+
+
   };
 
+ 
   return (
     <div className="login-page">
       <IconButton

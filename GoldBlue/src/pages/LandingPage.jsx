@@ -6,23 +6,27 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
+import image1 from "../assets/mobile-fast-payment.png";
+import image2 from "../assets/friendly-ui.jpg";
+import image3 from "../assets/security.jpg";
+import image4 from "../assets/track-payment.jpg";
 
 const rows = [
   {
     explanation: "row1Explanation", // Unique explanation for row 1
-    imageUrl: "https://picsum.photos/200",
+    imageUrl: image1,
   },
   {
     explanation: "row2Explanation", // Unique explanation for row 2
-    imageUrl: "https://picsum.photos/201",
+    imageUrl: image2,
   },
   {
     explanation: "row3Explanation", // Unique explanation for row 3
-    imageUrl: "https://picsum.photos/202",
+    imageUrl: image3,
   },
   {
     explanation: "row4Explanation", // Unique explanation for row 4
-    imageUrl: "https://picsum.photos/203",
+    imageUrl: image4,
   },
 ];
 

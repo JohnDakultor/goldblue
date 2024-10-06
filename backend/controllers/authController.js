@@ -31,7 +31,7 @@ class AuthController {
         }
 
         try {
-          const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY, { expiresIn: 300 });
+          const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY, { expiresIn: 172800 });
           const userData = { id: user.id, email: user.email };
 
           return res.status(200).json({ auth: true, token: token, result: userData });

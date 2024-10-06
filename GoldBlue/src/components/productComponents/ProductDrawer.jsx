@@ -108,16 +108,36 @@ export default function ProductDrawer() {
     };
 
     fetchUser();
+    // handleAutoAccumulationStop();
   }, []);
 
   const handleLogout = async () =>{
     try{
       await auth.logout();
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("accumulation");
+      localStorage.removeItem("lastTotalDeposits");
+      window.location.reload();
       setLogOut(true);
+
+      
     }catch(error){
       console.log(error);
     }
   };
+
+
+
+
+  // const handleAutoAccumulationStop = async () => {
+  //   fetch('http://localhost:3001/api/autoAccumulation', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({ action: 'stop' }) 
+  //   });
+  // }
 
   const handleDrawerOpen = () => {
     setOpen(true);
