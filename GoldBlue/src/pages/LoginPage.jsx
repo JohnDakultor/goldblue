@@ -65,6 +65,7 @@ export default function LoginPage() {
       });
 
       if (error) {
+        console.error('Supabase error:', error); // Log the error object
         setErrorMessage(error.message);
         return;
       }
