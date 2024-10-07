@@ -2,6 +2,7 @@ import Axios from "axios";
 import { Navigate } from "react-router-dom";
 
 const baseURL = "https://goldblue-backend-z2sk.vercel.app/api"; // Use the Vercel URL
+import supaBase from "../services/SupaBaseClient"
 
 /**
  * Signup a user with the provided information.
@@ -113,11 +114,12 @@ export const resetPassword = async (token, newPassword) => {
 // };
 
 export const deposit = async (imageUrl, amount) => {
+  const session = supaBase.auth.session();
   try {
     const response = await Axios.put(`${baseURL}/deposit`, { imageUrl, amount }, {
       headers: {
-        "x-access-token": localStorage.getItem("jwt"),
-        "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
+        "x-access-token": session.access_token,
+        "Authorization": `Bearer ${session.access_token}`,
       },
     });
     
