@@ -19,7 +19,7 @@ import { deposit } from '../../services/Axios'; // Import the deposit function
 import Modal from "../../components/Modal";
 
 
-import SupabaseCLient from "../../services/SupaBaseClient";
+import supabaseClient from "../../services/SupaBaseClient";
 
 const Deposit = () => {
     const bankNumber = "0165 0397 8973"; // Placeholder Tron wallet address
@@ -59,13 +59,13 @@ const Deposit = () => {
 
         try {
             // Upload image to Supabase
-            const { data, error } = await SupabaseCLient.storage
+            const { data, error } = await supabaseClient.storage
                 .from('deposits')
                 .upload(`deposit-${Date.now()}`, image);
             
             if (error) throw error;
             
-            const imageUrl = SupabaseCLient.storage
+            const imageUrl = supabaseClient.storage
                 .from('deposits')
                 .getPublicUrl(data.path).publicURL; // Get the public URL
 
