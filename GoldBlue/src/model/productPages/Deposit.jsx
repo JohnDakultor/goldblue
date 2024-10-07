@@ -93,6 +93,10 @@ const Deposit = () => {
     };
     
 
+    const handleCloseModal = () => {
+        setModalOpen(false); // Close the modal
+    };
+
     return (
         <Box sx={{ maxWidth: 400, mx: "auto", p: 3, mt: 5 }}>
             <AppBar>
