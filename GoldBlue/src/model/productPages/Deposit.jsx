@@ -48,7 +48,7 @@ const Deposit = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsUploading(true);
-
+    
         if (!image || !amount) {
             setModalTitle("Error");
             setModalContent("Please upload an image and enter an amount.");
@@ -56,19 +56,22 @@ const Deposit = () => {
             setIsUploading(false);
             return;
         }
-
+    
         try {
             // Upload image to Supabase
             const { data, error } = await supabaseClient.storage
                 .from('deposits')
                 .upload(`deposit-${Date.now()}`, image);
             
-            if (error) throw error;
-            
+            if (error) {
+                console.error("Supabase upload error:", error);
+                throw error;
+            }
+    
             const imageUrl = supabaseClient.storage
                 .from('deposits')
                 .getPublicUrl(data.path).publicURL; // Get the public URL
-
+    
             // Call deposit service with the image URL and amount
             const result = await deposit(imageUrl, amount); 
             
@@ -88,10 +91,7 @@ const Deposit = () => {
             setIsUploading(false);
         }
     };
-
-    const handleCloseModal = () => {
-        setModalOpen(false); // Close the modal
-    };
+    
 
     return (
         <Box sx={{ maxWidth: 400, mx: "auto", p: 3, mt: 5 }}>
