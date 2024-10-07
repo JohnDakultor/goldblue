@@ -64,6 +64,8 @@ export default function LoginPage() {
       if (res.data.auth === true) {
         localStorage.setItem('jwt', res.data.token); // Save JWT in local storage
         auth.login(res.data.result); // Log in with user sent from Express
+
+        await supabaseClient.auth.admin();
   
         if (email === 'goldbluecorpsol@gmail.com') {
           navigate('/admin', { replace: true }); // Redirect to admin panel
