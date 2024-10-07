@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useAuth } from "../services/Authentication";
 import HomeIcon from "@mui/icons-material/Home"; // Replace with your icon or image path
+import goldBlue from "../assets/goldblue.png";
 
 
 export default function LoginPage() {
@@ -95,7 +96,7 @@ export default function LoginPage() {
         onClick={() => navigate('/')}
       >
         <img
-          src="src/assets/goldblue.png"
+          src={goldBlue}
           alt="GoldBlue"
           style={{ height: "50px" }}
         />

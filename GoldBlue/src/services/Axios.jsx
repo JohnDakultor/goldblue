@@ -91,13 +91,30 @@ export const resetPassword = async (token, newPassword) => {
   }
 };
 
-export const deposit = async (image, amount) => {
-  try {
-    const formData = new FormData();
-    formData.append('image', image);
-    formData.append('amount', amount);
+// export const deposit = async (image, amount) => {
+//   try {
+//     const formData = new FormData();
+//     formData.append('image', image);
+//     formData.append('amount', amount);
 
-    const response = await Axios.post(`${baseURL}/deposit`, formData, {
+//     const response = await Axios.post(`${baseURL}/deposit`, formData, {
+//       headers: {
+//         "x-access-token": localStorage.getItem("jwt"),
+//       },
+//     });
+    
+//     return response.data;
+//   } catch (error) {
+//     if (error.response && error.response.data) {
+//       return error.response.data;
+//     }
+//     throw error;
+//   }
+// };
+
+export const deposit = async (imageUrl, amount) => {
+  try {
+    const response = await Axios.post(`${baseURL}/deposit`, { imageUrl, amount }, {
       headers: {
         "x-access-token": localStorage.getItem("jwt"),
       },
@@ -111,6 +128,7 @@ export const deposit = async (image, amount) => {
     throw error;
   }
 };
+
 
 export const getTransactions = async () => {
   try {

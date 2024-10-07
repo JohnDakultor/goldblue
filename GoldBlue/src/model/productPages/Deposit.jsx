@@ -17,9 +17,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import withUserData from '../../components/UserData';
 import { deposit } from '../../services/Axios'; // Import the deposit function
 import Modal from "../../components/Modal";
+import { createClient } from '@supabase/supabase-js';
 
 const Deposit = () => {
-    const tronWalletAddress = "TSiAmUn3fEdQk8UzSmUQrMPg7M7QejRxWx"; // Placeholder Tron wallet address
+    const bankNumber = "0165 0397 8973"; // Placeholder Tron wallet address
     const [copied, setCopied] = useState(false);
     const [image, setImage] = useState(null);
     const [amount, setAmount] = useState("");
@@ -28,10 +29,12 @@ const Deposit = () => {
     const [modalTitle, setModalTitle] = useState(""); // Title for modal
     const [modalContent, setModalContent] = useState(""); // Content for modal
 
+    const supabase = createClient('https://cydigdwxwsxlvfxdojax.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5ZGlnZHd4d3N4bHZmeGRvamF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgyMjk1NDIsImV4cCI6MjA0MzgwNTU0Mn0.yKvBZ4_5XD77-PBbRv5q04Flzyof5xz00G9dRxr9YSQ'); // Initialize Supabase client
+
     
 
-    const handleCopyAddress = () => {
-        navigator.clipboard.writeText(tronWalletAddress);
+    const handleCopyAccount = () => {
+        navigator.clipboard.writeText(bankNumber);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -53,7 +56,20 @@ const Deposit = () => {
         }
 
         try {
-            const result = await deposit(image, amount);
+            // Upload image to Supabase
+            const { data, error } = await supabase.storage
+                .from('deposits')
+                .upload(`deposit-${Date.now()}`, image);
+            
+            if (error) throw error;
+            
+            const imageUrl = supabase.storage
+                .from('deposits')
+                .getPublicUrl(data.path).publicURL; // Get the public URL
+
+            // Call deposit service with the image URL and amount
+            const result = await deposit(imageUrl, amount); 
+            
             if (result.success) {
                 setModalTitle("Success");
                 setModalContent("Deposit confirmation submitted successfully.");
@@ -66,7 +82,7 @@ const Deposit = () => {
             setModalTitle("Error");
             setModalContent("An error occurred while submitting your deposit.");
         } finally {
-            setModalOpen(true); // Open the modal
+            setModalOpen(true); 
             setIsUploading(false);
         }
     };
@@ -93,7 +109,7 @@ const Deposit = () => {
 
                     {/* TRON Wallet Address */}
                     <Typography variant="body1" sx={{ mt: 2 }}>
-                        Send TRX to the following wallet address:
+                        Send amount to the following GOTYME account: <Typography  component="strong" sx={{ fontWeight: 'bold' }} >Eufemia Lim</Typography>
                     </Typography>
                     <Box
                         sx={{
@@ -108,11 +124,11 @@ const Deposit = () => {
                             alignItems: 'center',
                         }}
                     >
-                        {tronWalletAddress}
+                        {bankNumber}
 
                         {/* Copy Icon */}
                         <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
-                            <IconButton onClick={handleCopyAddress} sx={{ ml: 1, color: "var(--icon-color)" }}>
+                            <IconButton onClick={handleCopyAccount} sx={{ ml: 1, color: "var(--icon-color)" }}>
                                 <ContentCopyIcon />
                             </IconButton>
                         </Tooltip>
@@ -120,9 +136,9 @@ const Deposit = () => {
 
                     {/* QR Code for Tron Wallet */}
                     <Box sx={{ textAlign: "center", mt: 3 }}>
-                        <QRCodeSVG value={tronWalletAddress} size={180} />
+                        <QRCodeSVG value={bankNumber} size={180} />
                         <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                            Scan to copy the address
+                            Scan to copy the GOTYME account
                         </Typography>
                     </Box>
 

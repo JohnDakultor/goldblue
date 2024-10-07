@@ -25,6 +25,8 @@ import { Link } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
 import axios from 'axios';
 
+import goldBlueLogo from '../../assets/goldblue.png';
+
 const drawerWidth = 240;
 
 
@@ -170,7 +172,7 @@ export default function ProductDrawer() {
             <MenuIcon />
           </IconButton>
           <img
-            src="src/assets/goldblue.png"
+            src={goldBlueLogo}
             style={{ height: 40}}
             alt="logo-goldblue"
             

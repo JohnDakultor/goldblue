@@ -247,12 +247,11 @@ import { NotificationService } from "./notificationService.js";
 
 class TransactionService {
   static deposit = async (req) => {
-    const { amount } = req.body;
-    const imagePath = req.file.path; // Ensure this is set correctly
-    const userId = req.userId; // User ID should be set by your JWT verification
+    const { amount, imageUrl } = req.body;
+    const userId = req.userId; // Assume userId is set by your JWT middleware
 
     // Validate required fields
-    if (!userId || !amount || !imagePath) {
+    if (!userId || !amount || !imageUrl) {
       throw new Error("All fields are required.");
     }
 
@@ -260,12 +259,12 @@ class TransactionService {
       const newTransaction = await new Transaction({
         user_id: userId,
         amount: amount,
-        image_path: imagePath,
-        status: "pending", // Set initial status
-        created_at: new Date(), // Make sure to add created_at
-      }).save(); // Use Bookshelf's save method
+        image_path: imageUrl,  // Store image URL instead of local path
+        status: "pending",
+        created_at: new Date(),
+      }).save();
 
-      // Fetch user's firstname and lastname from user_accounts table
+      // Fetch user's first and last name from user_accounts
       const user = createBookshelfModel("user_accounts");
       const userAccount = await new user({ id: userId }).fetch();
       if (!userAccount) {
@@ -274,7 +273,7 @@ class TransactionService {
 
       const { firstname, lastname } = userAccount.toJSON();
 
-      // Send notification about the deposit
+      // Send notification
       await NotificationService.createNotification(userId, `Your deposit of $${amount} is pending confirmation.`);
 
       return { success: true, depositId: newTransaction.id, firstname, lastname };
