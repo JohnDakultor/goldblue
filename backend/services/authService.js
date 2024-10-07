@@ -51,7 +51,7 @@ class AuthService {
   static login = async (userData) => {
     const { email, password } = userData;
     try {
-      const { user, error } = await supabase.auth.signIn({
+      const { user, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
