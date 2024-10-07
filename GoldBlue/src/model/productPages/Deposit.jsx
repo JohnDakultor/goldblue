@@ -17,9 +17,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import withUserData from '../../components/UserData';
 import { deposit } from '../../services/Axios'; // Import the deposit function
 import Modal from "../../components/Modal";
-
-
-import supabaseClient from '../../services/supaBaseClient';
+import supabaseClient from '../../services/SupaBaseClient';
 
 const Deposit = () => {
     const bankNumber = "0165 0397 8973"; // Placeholder Tron wallet address
