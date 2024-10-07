@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "@vercel/blob": "^0.24.1"
+    "@vercel/blob": "^0.24.1",
+    "uid": "^2.0.2",
+    "uid2": "^1.0.0"
   }
 }
