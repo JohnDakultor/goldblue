@@ -114,9 +114,9 @@ export const resetPassword = async (token, newPassword) => {
 // };
 
 export const deposit = async (imageUrl, amount) => {
-  const session = supaBase.auth.session();
+  
   try {
-    const response = await Axios.put(`${baseURL}/deposit`, { imageUrl, amount }, {
+    const response = await Axios.post(`${baseURL}/deposit`, { imageUrl, amount }, {
       headers: {
         "x-access-token": localStorage.getItem("jwt"),
       },
