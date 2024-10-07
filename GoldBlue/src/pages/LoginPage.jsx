@@ -26,7 +26,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
+  const baseURL = "https://goldblue-backend-zqak9.vercel.app/api";
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);

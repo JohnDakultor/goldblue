@@ -22,7 +22,7 @@ export default function Deposit() {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
-    const baseURL = "https://goldblue-backend-z2sk.vercel.app/api";
+    const baseURL = "https://goldblue-backend-zqak9.vercel.app/api";
 
     useEffect(() => {
         const fetchNotifications = async () => {

@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { Navigate } from "react-router-dom";
 
-const baseURL = "https://goldblue-backend-z2sk.vercel.app/api"; // Use the Vercel URL
+const baseURL = "https://goldblue-backend-zqak9.vercel.app/api"; // Use the Vercel URL
 
 
 /**

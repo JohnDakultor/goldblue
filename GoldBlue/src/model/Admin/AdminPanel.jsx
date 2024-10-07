@@ -30,8 +30,8 @@ const AdminPanel = () => {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
-    const BASE_URL = "https://goldblue-backend-z2sk.vercel.app/";
-    const ApiUrl = "https://goldblue-backend-z2sk.vercel.app/api";
+    const BASE_URL = "https://goldblue-backend-zqak9.vercel.app/";
+    const ApiUrl = "https://goldblue-backend-zqak9.vercel.app/api";
     const token = localStorage.getItem("jwt");
     const navigate = useNavigate(); 
 
