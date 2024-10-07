@@ -59,13 +59,16 @@ export default function LoginPage() {
       const res = await Axios.post(`${baseURL}/login`, {
         email: email,
         password: password,
+        Headers: {
+          "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+        }
       });
   
       if (res.data.auth === true) {
         localStorage.setItem('jwt', res.data.token); // Save JWT in local storage
         auth.login(res.data.result); // Log in with user sent from Express
 
-        await supabaseClient.auth.admin();
+        
   
         if (email === 'goldbluecorpsol@gmail.com') {
           navigate('/admin', { replace: true }); // Redirect to admin panel
