@@ -50,40 +50,35 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isEmailValid(email)) {
       setErrorMessage("Invalid Email");
       return;
     }
   
     try {
-      // Login with Supabase
-      const { user, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password,
+      const res = await Axios.post(`${baseURL}/login`, {
+        email: email,
+        password: password,
       });
-
-      if (error) {
-        console.error('Supabase error:', error); // Log the error object
-        setErrorMessage(error.message);
-        return;
-      }
-
-      // Successful login
-      console.log("User logged in:", user);
-      localStorage.setItem('jwt', user?.jwt); // Save JWT in local storage (if needed)
-
-      // Navigate based on user role (if applicable)
-      if (email === 'goldbluecorpsol@gmail.com') {
-        navigate('/admin', { replace: true });
+  
+      if (res.data.auth === true) {
+        localStorage.setItem('jwt', res.data.token); // Save JWT in local storage
+        auth.login(res.data.result); // Log in with user sent from Express
+  
+        if (email === 'goldbluecorpsol@gmail.com') {
+          navigate('/admin', { replace: true }); // Redirect to admin panel
+        } else {
+          navigate('/dashboard', { replace: true }); // Redirect to user dashboard
+        }
       } else {
-        navigate('/dashboard', { replace: true });
+        setErrorMessage("Invalid password");
       }
     } catch (err) {
       console.error(err);
-      setErrorMessage("An unexpected error occurred. Please try again.");
+      setErrorMessage("Invalid password");
     }
+
+
   };
 
  

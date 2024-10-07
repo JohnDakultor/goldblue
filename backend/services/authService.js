@@ -45,7 +45,7 @@ class AuthService {
     try {
       const User = createBookshelfModel("user_accounts");
 
-      const user = await User({ email }).fetch();
+      const user = await User.where({ email }).fetch();
       if (!user) {
         throw new Error("Invalid email or password");
       }
