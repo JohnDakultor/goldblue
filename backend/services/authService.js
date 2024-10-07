@@ -5,35 +5,43 @@ import { insertInto } from "../config/dbConfig.js";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import {bookshelfInstance} from "../config/dbConfig.js";
+import { supabase } from "../config/supaBaseClient.js";
 
 class AuthService {
   // AuthService.js
   static signUp = async (userData) => {
-    const { firstName, lastName, email, password } = userData; // use password here
+    const { firstName, lastName, email, password } = userData;
     try {
-      if (!password) {
-        throw new Error("Password is required");
-      }
-
+      // Check for existing user in your local DB
       const User = createBookshelfModel("user_accounts");
-
       const existingUser = await new User({ email }).fetch({ require: false });
       if (existingUser) {
         throw new Error("Email already in use");
       }
 
+      // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      // Create user in your local database
       const newUser = {
         firstname: firstName,
         lastname: lastName,
         email: email,
         hash_password: hashedPassword,
       };
-
       await insertInto("user_accounts", [newUser]);
 
-      return newUser;
+      // Now create the user in Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        throw new Error("Error signing up in Supabase: " + error.message);
+      }
+
+      return { newUser, supabaseUser: data.user };
     } catch (error) {
       console.error("Error during sign up:", error.message);
       throw error;
@@ -43,28 +51,36 @@ class AuthService {
   static login = async (userData) => {
     const { email, password } = userData;
     try {
-      const User = createBookshelfModel("user_accounts");
+      const { user, error } = await supabase.auth.signIn({
+        email: email,
+        password: password,
+      });
 
-      const user = await User.where({ email }).fetch();
-      if (!user) {
+      if (error) {
+        throw new Error(`Supabase login error: ${error.message}`);
+      }
+
+      const User = createBookshelfModel("user_accounts");
+      const fetchedUser = await User.where({ email }).fetch();
+      if (!fetchedUser) {
         throw new Error("Invalid email or password");
       }
 
       const isValidPassword = await bcrypt.compare(
         password,
-        user.get("hash_password")
+        fetchedUser.get("hash_password")
       );
       if (!isValidPassword) {
         throw new Error("Invalid email or password");
       }
 
       const token = jwt.sign(
-        { id: user.id, email: user.get("email") },
+        { id: fetchedUser.id, email: fetchedUser.get("email") },
         process.env.JWT_KEY,
         { expiresIn: 300 }
       );
 
-      return { user: user.toJSON(), token };
+      return { user: fetchedUser.toJSON(), token };
     } catch (error) {
       throw error;
     }

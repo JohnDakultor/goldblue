@@ -2,7 +2,7 @@ import Axios from "axios";
 import { Navigate } from "react-router-dom";
 
 const baseURL = "https://goldblue-backend-z2sk.vercel.app/api"; // Use the Vercel URL
-import supaBase from "../services/SupaBaseClient"
+
 
 /**
  * Signup a user with the provided information.

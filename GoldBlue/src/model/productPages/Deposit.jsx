@@ -17,10 +17,9 @@ import { QRCodeSVG } from 'qrcode.react';
 import withUserData from '../../components/UserData';
 import { deposit } from '../../services/Axios'; // Import the deposit function
 import Modal from "../../components/Modal";
-import { unstable_createBlob } from '@vercel/blob';
 
 
-import supabaseClient from "../../services/SupaBaseClient";
+import supabaseClient from "../../services/supaBaseClient";
 
 const Deposit = () => {
     const bankNumber = "0165 0397 8973"; // Placeholder Tron wallet address
@@ -46,9 +45,7 @@ const Deposit = () => {
         setImage(e.target.files[0]);
     };
 
-   
-
-const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     setIsUploading(true);
 
@@ -68,15 +65,21 @@ const handleSubmit = async (e) => {
             throw new Error("User is not authenticated.");
         }
 
-        // Upload image to Vercel Blob Storage
-        const formData = new FormData();
-        formData.append('file', image);
-        
-        // This creates a blob and uploads it to Vercel
-        const blobResponse = await unstable_createBlob(image);
-        const imageUrl = blobResponse.url;
+        // Upload image to Supabase
+        const { data, error } = await supabaseClient.storage
+            .from('deposits')
+            .upload(`deposit-${Date.now()}`, image, { returning: 'minimal' });
 
-        // Call deposit service with the Vercel blob URL and amount
+        if (error) {
+            console.error("Supabase upload error:", error);
+            throw error;
+        }
+
+        const imageUrl = supabaseClient.storage
+            .from('deposits')
+            .getPublicUrl(data.path).publicURL;
+
+        // Call deposit service with the image URL and amount
         const result = await deposit(imageUrl, amount);
 
         if (result.success) {

@@ -15,7 +15,7 @@ import Axios from "axios";
 import { useAuth } from "../services/Authentication";
 import HomeIcon from "@mui/icons-material/Home"; // Replace with your icon or image path
 import goldBlue from "../assets/goldblue.png";
-import supabaseClient from "../services/SupaBaseClient";
+
 
 
 export default function LoginPage() {
