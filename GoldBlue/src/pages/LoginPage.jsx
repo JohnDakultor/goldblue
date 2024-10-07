@@ -59,7 +59,7 @@ export default function LoginPage() {
   
     try {
       // Login with Supabase
-      const { user, error } = await supabase.auth.signInWithPassword({
+      const { user, error } = await supabaseClient.auth.signInWithPassword({
         email,
         password,
       });
