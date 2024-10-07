@@ -128,7 +128,7 @@ class AuthService {
       await user.save();
 
       // Create reset link
-      const resetUrl = `http://localhost:5173/resetpassword?token=${resetToken}`;
+      const resetUrl = `https://goldblue-backend-z2sk.vercel.app/api/resetpassword?token=${resetToken}`;
 
       // Send the email
       const transporter = nodemailer.createTransport({
