@@ -61,7 +61,7 @@ const Deposit = () => {
             // Upload image to Supabase
             const { data, error } = await supabaseClient.storage
                 .from('deposits')
-                .upload(`deposit-${Date.now()}`, image);
+                .upload(`deposit-${Date.now()}`, image, {returning: 'minimal'});
             
             if (error) {
                 console.error("Supabase upload error:", error);
