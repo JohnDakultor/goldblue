@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 import { AuthController } from "../controllers/authController.js";
 import verifyJWT from "../middlewares/verifyJWT.js";
 import { TransactionController } from "../controllers/transactionController.js";
