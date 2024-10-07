@@ -58,11 +58,18 @@ const Deposit = () => {
         }
     
         try {
+            // Ensure user is authenticated
+            const { user } = supabaseClient.auth;
+    
+            if (!user) {
+                throw new Error("User is not authenticated.");
+            }
+    
             // Upload image to Supabase
             const { data, error } = await supabaseClient.storage
                 .from('deposits')
                 .upload(`deposit-${Date.now()}`, image, {returning: 'minimal'});
-            
+    
             if (error) {
                 console.error("Supabase upload error:", error);
                 throw error;
@@ -70,11 +77,11 @@ const Deposit = () => {
     
             const imageUrl = supabaseClient.storage
                 .from('deposits')
-                .getPublicUrl(data.path).publicURL; // Get the public URL
+                .getPublicUrl(data.path).publicURL;
     
             // Call deposit service with the image URL and amount
-            const result = await deposit(imageUrl, amount); 
-            
+            const result = await deposit(imageUrl, amount);
+    
             if (result.success) {
                 setModalTitle("Success");
                 setModalContent("Deposit confirmation submitted successfully.");
@@ -87,7 +94,7 @@ const Deposit = () => {
             setModalTitle("Error");
             setModalContent("An error occurred while submitting your deposit.");
         } finally {
-            setModalOpen(true); 
+            setModalOpen(true);
             setIsUploading(false);
         }
     };
