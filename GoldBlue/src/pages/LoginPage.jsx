@@ -15,6 +15,7 @@ import Axios from "axios";
 import { useAuth } from "../services/Authentication";
 import HomeIcon from "@mui/icons-material/Home"; // Replace with your icon or image path
 import goldBlue from "../assets/goldblue.png";
+import supabaseClient from "../services/SupaBaseClient";
 
 
 export default function LoginPage() {
@@ -49,35 +50,39 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    if (!isEmailValid(email)) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       setErrorMessage("Invalid Email");
       return;
     }
   
     try {
-      const res = await Axios.post(`${baseURL}/login`, {
-        email: email,
-        password: password,
+      // Login with Supabase
+      const { user, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
-  
-      if (res.data.auth === true) {
-        localStorage.setItem('jwt', res.data.token); // Save JWT in local storage
-        auth.login(res.data.result); // Log in with user sent from Express
-  
-        if (email === 'goldbluecorpsol@gmail.com') {
-          navigate('/admin', { replace: true }); // Redirect to admin panel
-        } else {
-          navigate('/dashboard', { replace: true }); // Redirect to user dashboard
-        }
+
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+
+      // Successful login
+      console.log("User logged in:", user);
+      localStorage.setItem('jwt', user?.jwt); // Save JWT in local storage (if needed)
+
+      // Navigate based on user role (if applicable)
+      if (email === 'goldbluecorpsol@gmail.com') {
+        navigate('/admin', { replace: true });
       } else {
-        setErrorMessage("Invalid password");
+        navigate('/dashboard', { replace: true });
       }
     } catch (err) {
       console.error(err);
-      setErrorMessage("Invalid password");
+      setErrorMessage("An unexpected error occurred. Please try again.");
     }
-
-
   };
 
  
