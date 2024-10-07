@@ -46,59 +46,59 @@ const Deposit = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsUploading(true);
-    
-        if (!image || !amount) {
-            setModalTitle("Error");
-            setModalContent("Please upload an image and enter an amount.");
-            setModalOpen(true);
-            setIsUploading(false);
-            return;
+    e.preventDefault();
+    setIsUploading(true);
+
+    if (!image || !amount) {
+        setModalTitle("Error");
+        setModalContent("Please upload an image and enter an amount.");
+        setModalOpen(true);
+        setIsUploading(false);
+        return;
+    }
+
+    try {
+        // Ensure user is authenticated
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        
+        if (!user) {
+            throw new Error("User is not authenticated.");
         }
-    
-        try {
-            // Ensure user is authenticated
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            
-            if (!user) {
-                throw new Error("User is not authenticated.");
-            }
-    
-            // Upload image to Supabase
-            const { data, error } = await supabaseClient.storage
-                .from('deposits')
-                .upload(`deposit-${Date.now()}`, image, { returning: 'minimal' });
-    
-            if (error) {
-                console.error("Supabase upload error:", error);
-                throw error;
-            }
-    
-            const imageUrl = supabaseClient.storage
-                .from('deposits')
-                .getPublicUrl(data.path).publicURL;
-    
-            // Call deposit service with the image URL and amount
-            const result = await deposit(imageUrl, amount);
-    
-            if (result.success) {
-                setModalTitle("Success");
-                setModalContent("Deposit confirmation submitted successfully.");
-            } else {
-                setModalTitle("Error");
-                setModalContent("Deposit submission failed.");
-            }
-        } catch (error) {
-            console.error("Error during submission:", error);
-            setModalTitle("Error");
-            setModalContent("An error occurred while submitting your deposit.");
-        } finally {
-            setModalOpen(true);
-            setIsUploading(false);
+
+        // Upload image to Supabase
+        const { data, error } = await supabaseClient.storage
+            .from('deposits')
+            .upload(`deposit-${Date.now()}`, image, { returning: 'minimal' });
+
+        if (error) {
+            console.error("Supabase upload error:", error);
+            throw error;
         }
-    };
-    
+
+        const imageUrl = supabaseClient.storage
+            .from('deposits')
+            .getPublicUrl(data.path).publicURL;
+
+        // Call deposit service with the image URL and amount
+        const result = await deposit(imageUrl, amount);
+
+        if (result.success) {
+            setModalTitle("Success");
+            setModalContent("Deposit confirmation submitted successfully.");
+        } else {
+            setModalTitle("Error");
+            setModalContent("Deposit submission failed.");
+        }
+    } catch (error) {
+        console.error("Error during submission:", error);
+        setModalTitle("Error");
+        setModalContent("An error occurred while submitting your deposit.");
+    } finally {
+        setModalOpen(true);
+        setIsUploading(false);
+    }
+};
+
     
 
     const handleCloseModal = () => {

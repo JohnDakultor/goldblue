@@ -118,8 +118,7 @@ export const deposit = async (imageUrl, amount) => {
   try {
     const response = await Axios.put(`${baseURL}/deposit`, { imageUrl, amount }, {
       headers: {
-        "x-access-token": session.access_token,
-        "Authorization": `Bearer ${session.access_token}`,
+        "x-access-token": localStorage.getItem("jwt"),
       },
     });
     
