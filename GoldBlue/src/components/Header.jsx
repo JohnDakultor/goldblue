@@ -45,7 +45,7 @@ export default function Header({ children }) {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
-                color="inherit"
+                color="primary"
               >
                 <MenuIcon />
               </IconButton>
