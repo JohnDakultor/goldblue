@@ -17,7 +17,9 @@ import { QRCodeSVG } from 'qrcode.react';
 import withUserData from '../../components/UserData';
 import { deposit } from '../../services/Axios'; // Import the deposit function
 import Modal from "../../components/Modal";
-import { createClient } from '@supabase/supabase-js';
+
+
+import SupabaseCLient from "../../services/SupaBaseClient";
 
 const Deposit = () => {
     const bankNumber = "0165 0397 8973"; // Placeholder Tron wallet address
@@ -29,7 +31,7 @@ const Deposit = () => {
     const [modalTitle, setModalTitle] = useState(""); // Title for modal
     const [modalContent, setModalContent] = useState(""); // Content for modal
 
-    const supabase = createClient('https://cydigdwxwsxlvfxdojax.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5ZGlnZHd4d3N4bHZmeGRvamF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgyMjk1NDIsImV4cCI6MjA0MzgwNTU0Mn0.yKvBZ4_5XD77-PBbRv5q04Flzyof5xz00G9dRxr9YSQ'); // Initialize Supabase client
+    
 
     
 
@@ -57,13 +59,13 @@ const Deposit = () => {
 
         try {
             // Upload image to Supabase
-            const { data, error } = await supabase.storage
+            const { data, error } = await SupabaseCLient.storage
                 .from('deposits')
                 .upload(`deposit-${Date.now()}`, image);
             
             if (error) throw error;
             
-            const imageUrl = supabase.storage
+            const imageUrl = SupabaseCLient.storage
                 .from('deposits')
                 .getPublicUrl(data.path).publicURL; // Get the public URL
 

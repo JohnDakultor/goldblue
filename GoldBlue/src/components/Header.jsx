@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
@@ -21,7 +20,7 @@ const pages = [
 const log = ["login", "signUp"];
 
 export default function Header({ children }) {
-  const { t } = useTranslation();  // Hook to get translation function
+  const { t } = useTranslation(); // Hook to get translation function
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -29,16 +28,8 @@ export default function Header({ children }) {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   return (
@@ -46,38 +37,11 @@ export default function Header({ children }) {
       <header>
         <AppBar position="static">
           <Toolbar disableGutters>
-            {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, ml: 4 }} /> */}
-            
-            
-            <Typography
-              variant="h6"
-              noWrap
-              component={Link}
-              to="/"
-              sx={{
-                mr: 2,
-                mt:1,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              <img
-            src={goldblueLogo}
-            style={{ height: 40, marginLeft: 16}}
-            alt="logo-goldblue"
-            
-            />
-              GoldBlue
-            </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            {/* Mobile menu icon */}
+            <Box sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}>
               <IconButton
                 size="large"
-                aria-label="account of current user"
+                aria-label="menu"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
@@ -115,26 +79,50 @@ export default function Header({ children }) {
                 ))}
               </Menu>
             </Box>
-            
+
+            {/* Desktop logo */}
+            <Typography
+              variant="h6"
+              noWrap
+              component={Link}
+              to="/"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
+                textDecoration: "none",
+              }}
+            >
+              <img
+                src={goldblueLogo}
+                alt="logo-goldblue"
+                style={{ height: "40px", marginRight: 8 }}
+              />
+              GoldBlue
+            </Typography>
+
+            {/* Mobile logo */}
             <Typography
               variant="h5"
               noWrap
               component={Link}
               to="/"
               sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
                 flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
+                display: { xs: "flex", md: "none" },
+                alignItems: "center",
                 textDecoration: "none",
               }}
             >
-              <img src={goldblueLogo} alt="logo-goldblue" style={{ height: 30}}/>
+              <img
+                src={goldblueLogo}
+                alt="logo-goldblue"
+                style={{ height: "30px", marginRight: 8 }}
+              />
               GoldBlue
             </Typography>
+
+            {/* Desktop menu items */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
@@ -155,9 +143,8 @@ export default function Header({ children }) {
               ))}
             </Box>
 
-            <Box
-              sx={{ display: "flex", justifyContent: "flex-end", flexGrow: 1 }}
-            >
+            {/* Login/Signup buttons */}
+            <Box sx={{ display: "flex", justifyContent: "flex-end", flexGrow: 1 }}>
               {log.map((logs) => (
                 <Button
                   key={logs}
@@ -167,7 +154,8 @@ export default function Header({ children }) {
                     color: "white",
                     border: "1px solid white",
                     borderRadius: "20px",
-                    marginRight: "10px",
+                    marginRight: { xs: "5px", md: "10px" },
+                    padding: { xs: "5px 10px", md: "8px 16px" },
                     ":hover": { color: "yellow", border: "1px yellow" },
                   }}
                   component={Link}
