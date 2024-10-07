@@ -59,8 +59,8 @@ const Deposit = () => {
     
         try {
             // Ensure user is authenticated
-            const { user } = supabaseClient.auth;
-    
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            
             if (!user) {
                 throw new Error("User is not authenticated.");
             }
@@ -68,7 +68,7 @@ const Deposit = () => {
             // Upload image to Supabase
             const { data, error } = await supabaseClient.storage
                 .from('deposits')
-                .upload(`deposit-${Date.now()}`, image, {returning: 'minimal'});
+                .upload(`deposit-${Date.now()}`, image, { returning: 'minimal' });
     
             if (error) {
                 console.error("Supabase upload error:", error);
@@ -98,6 +98,7 @@ const Deposit = () => {
             setIsUploading(false);
         }
     };
+    
     
 
     const handleCloseModal = () => {
