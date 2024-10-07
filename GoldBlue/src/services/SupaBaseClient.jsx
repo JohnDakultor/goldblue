@@ -6,10 +6,4 @@ const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 const supabaseClient= createClient(supabaseUrl, supabaseAnonKey);
 
-const token = localStorage.getItem("jwt");
-if (token) {
-    supabaseClient.auth.setAuth(token);
-}
-
-
 export default supabaseClient;  

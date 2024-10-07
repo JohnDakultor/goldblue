@@ -48,34 +48,27 @@ const Deposit = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsUploading(true);
-    
+
         if (!image || !amount) {
             setModalTitle("Error");
             setModalContent("Please upload an image and enter an amount.");
+            setModalOpen(true);
             setIsUploading(false);
             return;
         }
-    
+
         try {
-            // Get JWT token from local storage
-            const token = localStorage.getItem("jwt");
-            
-            // Set headers for Supabase upload
-            const headers = {
-                'Authorization': `Bearer ${token}`,
-            };
-    
-            // Upload image to Supabase with authorization header
+            // Upload image to Supabase
             const { data, error } = await supabaseClient.storage
                 .from('deposits')
-                .upload(`deposit-${Date.now()}`, image, { headers });
+                .upload(`deposit-${Date.now()}`, image);
             
             if (error) throw error;
             
             const imageUrl = supabaseClient.storage
                 .from('deposits')
                 .getPublicUrl(data.path).publicURL; // Get the public URL
-    
+
             // Call deposit service with the image URL and amount
             const result = await deposit(imageUrl, amount); 
             
@@ -95,7 +88,6 @@ const Deposit = () => {
             setIsUploading(false);
         }
     };
-    
 
     const handleCloseModal = () => {
         setModalOpen(false); // Close the modal
