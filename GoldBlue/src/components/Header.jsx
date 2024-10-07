@@ -22,17 +22,14 @@ const log = ["login", "signUp"];
 export default function Header({ children }) {
   const { t } = useTranslation(); // Hook to get translation function
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-    // Prevent screen from moving when the menu is open
-    document.body.style.overflow = "hidden";
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-    // Restore scroll behavior when the menu is closed
-    document.body.style.overflow = "auto";
   };
 
   return (
@@ -94,7 +91,6 @@ export default function Header({ children }) {
                 display: { xs: "none", md: "flex" },
                 alignItems: "center",
                 textDecoration: "none",
-                color: "yellow", // Set color to yellow
               }}
             >
               <img
@@ -116,7 +112,6 @@ export default function Header({ children }) {
                 display: { xs: "flex", md: "none" },
                 alignItems: "center",
                 textDecoration: "none",
-                color: "yellow", // Set color to yellow
               }}
             >
               <img
